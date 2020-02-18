@@ -9,8 +9,7 @@
 import Foundation
 import CoreData
 
-#error("Change this value to your own firebase database! (and then delete this line)")
-let baseURL = URL(string: "https://journal-syncing.firebaseio.com/")!
+let baseURL = URL(string: "https://testing-f766e.firebaseio.com/")!
 
 class EntryController {
     
@@ -25,12 +24,8 @@ class EntryController {
     
     func update(entry: Entry, title: String, bodyText: String, mood: String) {
         
-        entry.title = title
-        entry.bodyText = bodyText
-        entry.timestamp = Date()
-        entry.mood = mood
-        
-        put(entry: entry)
+        createEntry(with: title, bodyText: bodyText, mood: mood)
+        delete(entry: entry)
         
         saveToPersistentStore()
     }
@@ -45,7 +40,7 @@ class EntryController {
     private func put(entry: Entry, completion: @escaping ((Error?) -> Void) = { _ in }) {
         
         let identifier = entry.identifier ?? UUID().uuidString
-        let requestURL = baseURL.appendingPathComponent(identifier).appendingPathComponent("json")
+        let requestURL = baseURL.appendingPathComponent(identifier).appendingPathExtension("json")
         var request = URLRequest(url: requestURL)
         request.httpMethod = "PUT"
         
